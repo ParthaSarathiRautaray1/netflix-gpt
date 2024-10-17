@@ -1,6 +1,13 @@
 import { useState , useRef } from "react"
 import Header from "./Header"
 import {checkValidData} from "../utils/validate"
+
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {auth} from "../utils/firebase"
+
+const provider = new GoogleAuthProvider();
+
+
 const Login = () => {
     const [isSignin , setisSignin] = useState(true)
 
@@ -26,6 +33,50 @@ const Login = () => {
         isSignin ? null : phone.current?.value   // Only pass if not Sign In
       )
       seterrorMessage(message)
+
+      if(message) return // if message then there should be an error . so not need to go further return from here else go ahead and create a user
+
+      if(!isSignin){
+        //signup logic
+        signInWithPopup(auth, provider)
+
+          .then((result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            // The signed-in user info.
+            const user = result.user;
+            console.log(user);
+            
+            // IdP data available using getAdditionalUserInfo(result)
+            // ...
+          }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            // ...
+            seterrorMessage(errorCode + "-" + errorMessage)
+            });
+
+
+      }else{
+        //signin logic
+        
+          signInWithPopup(auth, provider)
+            .then((result) => {
+              const user = result.user;
+              console.log("User signed in:", user);
+              // Now, user is signed in - you can redirect or show a welcome message
+            })
+            .catch((error) => {
+              console.error('Error during sign-in:', error.message);
+            });
+        ;
+      }
       
     }
   return (
@@ -46,7 +97,9 @@ const Login = () => {
 
             <p className="text-red-500 px-4 text-sm font-semibold">{errorMessage}</p>
 
-            <button className="p-4 m-4 bg-red-700 w-full font-bold rounded-md" type="submit" onClick={handleButtonClick}>{isSignin ? "Sign In " : "Sign UP"} </button>
+            <span className= "px-40 text-sm font-semibold">or</span>
+
+            <button className="p-4 m-4 bg-red-700 w-full font-bold rounded-md" type="submit" onClick={handleButtonClick}>{isSignin ? "Sign In with Google " : "Sign UP"} </button>
             <p className="py-4 px-4 cursor-pointer underline underline-offset-4" onClick={toggleSignInform} >{ isSignin ? "New to Netflix ? Sign Up Now" :"Already Singed Up ! Sign In"}</p>
 
         </form>
