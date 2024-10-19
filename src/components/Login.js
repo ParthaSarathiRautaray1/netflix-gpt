@@ -4,7 +4,7 @@ import {checkValidData} from "../utils/validate"
 
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import {auth} from "../utils/firebase"
-import { useNavigate } from "react-router-dom";
+
 
 const provider = new GoogleAuthProvider();
 
@@ -14,7 +14,7 @@ const Login = () => {
 
     const [errorMessage , seterrorMessage] = useState(null)
 
-    const navigate = useNavigate()
+   
 
     const toggleSignInform =() =>{
         setisSignin(!isSignin)
@@ -50,7 +50,7 @@ const Login = () => {
             // The signed-in user info.
             const user = result.user;
             console.log(user);
-            navigate("/browse")
+            
 
             
            
@@ -76,7 +76,7 @@ const Login = () => {
               console.log("User signed in:", user);
 
               // Now, user is signed in - you can redirect or show a welcome message
-              navigate("/browse")
+             
             })
             .catch((error) => {
               console.error('Error during sign-in:', error.message);
