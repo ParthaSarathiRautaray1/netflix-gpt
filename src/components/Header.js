@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
+import { NETFLIX_LOGO_URL } from "../utils/constants";
 
 
 const Header = () => {
@@ -22,7 +23,7 @@ const Header = () => {
   }
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
@@ -38,13 +39,14 @@ const Header = () => {
        
       }
     });
+    return () => unsubscribe();
   } , [])
 
 
 
   return (
     <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-30 flex justify-between">
-        <img className="w-52" src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png" alt="logonetflix" />
+        <img className="w-52" src={NETFLIX_LOGO_URL} alt="logonetflix" />
 
         <div className="flex">
           <button className="font-semibold text-white" onClick={handleSignout}>Sign Out</button>
