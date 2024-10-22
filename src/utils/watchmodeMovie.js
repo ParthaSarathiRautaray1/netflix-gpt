@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const API_KEY = 'paIX6kh6nhTFeOUwO2xvqn2wgBeJUYkOTIFq2VgY';
 const BASE_URL = 'https://api.watchmode.com/v1';
+const YOUTUBE_API_KEY = 'AIzaSyCNoWbWSrec1gU2fDot2NCQm8in7vCxTgw'
+
 
 
 const getImageUrl = (imdbId) => {
@@ -26,6 +28,10 @@ export const fetchMovies = async () => {
 
       console.log(moviesWithImages);
       return moviesWithImages;
+
+      // fetching youtube trailer
+
+
     
   } catch (error) {
     console.error('Error fetching movies:', error);
